@@ -9,6 +9,13 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}\\app.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Linux",
+            "program": "${workspaceFolder}/app.js",
+            "args": ["-t", "-d"]
         }
     ]
 }

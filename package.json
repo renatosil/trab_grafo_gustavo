@@ -1,0 +1,23 @@
+{
+  "name": "trab_grafo_gustavo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renatosil/trab_grafo_gustavo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/renatosil/trab_grafo_gustavo/issues"
+  },
+  "homepage": "https://github.com/renatosil/trab_grafo_gustavo#readme",
+  "dependencies": {
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.0"
+  }
+}

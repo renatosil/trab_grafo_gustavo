@@ -7,17 +7,16 @@ module.exports.getGrafo = (maxNos, maxPeso) => {
     var origem = 0;
     var destino = 0;
     var custo = 0;
-
-    for (let i = 0; i < (maxNos); i++) {
-        origem = utils.getRandomInt(0, maxNos);
-        destino = utils.getRandomInt(0, maxNos);
+    var gerados = [];
+    for (let i = 0; i < (maxNos * 2); i++) {
+        origem = utils.getRandomInt(0, maxNos / 2);
+        destino = utils.getRandomInt(0, maxNos / 2);
         custo = utils.getRandomInt(1, maxPeso);
 
         if (origem === destino) {
             i--;
             continue;
         }
-
 
         if (_.isArray(grafo[origem])) {
             grafo[origem].push({ [destino]: custo })
@@ -40,43 +39,18 @@ module.exports.getGrafo = (maxNos, maxPeso) => {
 
 
 module.exports.custo = (grafo) => {
-    const nos = Object.keys(grafo);
-    var noAtual = nos[0];
-    var visitados = [];
+    //grafo = {"13":{"49":4},"35":{"42":7},"42":{"93":6},"45":{"62":5},"49":{"83":2},"62":{"92":2},"78":{"13":8},"83":{"35":6},"92":{"45":1},"93":{"62":4}};
+
     var custo = 0;
-    var j = 0;
+    const nos = Object.keys(grafo);
 
-    for (let i = 0; i < nos.length; i++) {
-        const destino = grafo[noAtual];
-        if (!destino[j]) {
-            i = nos.length;
-            continue;
-        }
+    nos.forEach((n) => {
+        let dest = grafo[n];
+        let index  = Object.keys(dest)
+        custo += dest[index];
+    })
 
-        const key = Object.keys(destino[j]);
-
-        if (!key) {
-            i = nos.length;
-            continue;
-        }
-
-        if (noAtual != Number(key[0])) {
-            if (visitados.indexOf(key[0]) < 0) {
-                visitados.push(noAtual);
-                custo += destino[j][key[0]];
-                if (Number.isNaN(custo)) {
-                    continue;
-                }
-                noAtual = key[0]
-            } else {
-                j++;
-                i--;
-            }
-
-        }
-    }
-
-    return { custo, visitados, grafo };
+    return custo;
 }
 
 
@@ -84,34 +58,33 @@ module.exports.custo = (grafo) => {
 
 
 
-module.exports.solucaoInicial = (grafo) => {
+module.exports.solucao = (grafo, no) => {
     const nos = Object.keys(grafo);
-    var no = utils.getRandomInt(0, nos.length)+'';
+    if (no < 0) {
+        no = utils.getRandomInt(0, nos.length)+'';
+    }
     var solucao = {};
     var visitados = [];
-    var j = 1, x = 0;
+    var j = 0, x = 0;
     while(!grafo[no]) no++;
 
     for ( let i = 0; i < nos.length; i ++) {
-        
-        if(visitados.indexOf(no) >= 0) {
-            i-=2;
-            x++;
-            j++;
-            if (x == nos.length) {
-                i = x;
-            }
-            continue;
+        dest = grafo[no];
+        if(dest.length > 1){
+            j = (dest.length % 2) + 1;
         }
-        
-        let dest = grafo[no][Math.abs(j)];
-        solucao[no] = dest;
-        visitados.push(no)
-        no = Object.keys(dest)[0]
+
+        let proxNo = Object.keys(dest[j])[0];
+
+        if (visitados.indexOf(no) < 0) {
+            solucao[no] = {[proxNo]: dest[j][proxNo]};
+            visitados.push(no);
+            no = proxNo;
+        }
+
         j = 0;
     }
-    var visitados = [];
 
 
-    console.log(JSON.stringify(nos));
+    return solucao;
 }

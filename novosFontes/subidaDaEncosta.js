@@ -1,11 +1,34 @@
-module.exports.hillClimb = (solucao, fnCusto, callback) => {
-    var {custoAtual, caminho, grafo} = solucao;
-    var vizinhos = [];
+const gf = require('./grafo');
+
+module.exports.hillClimb = (grafo) => {
+    const tamGrafo = Object.keys(grafo);
+    var solucao = gf.solucao(grafo, -1);
+    const custoAtual = gf.custo(solucao);
     var melhorCusto = custoAtual;
+    var vizinhos = [];
+    var caminho = Object.keys(solucao);
 
-    while (true) {
-       console.log("chegou");
-    }
+    caminho.forEach((n) => {
+        let index = Number(n);
 
-    return solucao;
+        if (tamGrafo.length <= (index +1)) {
+            vizinhos.push(gf.solucao(grafo, (index + 1)));
+        }
+
+        if (0 <= (index - 1)) {
+            vizinhos.push(gf.solucao(grafo, (index - 1)));
+        }
+    })
+
+
+    vizinhos.forEach((s) => {
+        let custoAtual = gf.custo(s);
+
+        if (custoAtual < melhorCusto) {
+            melhorCusto = custoAtual;
+            solucao = s;
+        }
+    })
+
+    return {melhorCusto, solucao};
 }
